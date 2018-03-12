@@ -2,10 +2,10 @@ import java.util.LinkedList;
 
 public class PoolNode implements Comparable<PoolNode> {
 
-	private int parkId;
-	private int facilityId;
-	private String poolName;
-	double longitude, latitude;
+	public int parkId;
+	public int facilityId;
+	public String poolName;
+	public double longitude, latitude;
 	private LinkedList<PoolEdge> edges;
 	
 	public PoolNode(int parkId, int facilityId, String poolName, double longitude, double latitude) {

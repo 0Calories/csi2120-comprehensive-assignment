@@ -39,7 +39,7 @@ public class Parser {
 			
 			int parkId = ((Long) poolProperties.get("PARK_ID")).intValue();
 			int facilityId = ((Long) poolProperties.get("FACILITYID")).intValue();
-			String poolName = poolProperties.get("FACILITYID").toString();
+			String poolName = poolProperties.get("NAME").toString();
 			Object[] coordsArray = ((JSONArray) geometry.get("coordinates")).toArray();
 			double latitude = (double) coordsArray[0];
 			double longitude = (double) coordsArray[1];
@@ -54,7 +54,7 @@ public class Parser {
 			System.out.println(p.latitude + ", " + p.longitude);
 		}
 		
-		System.out.println(Utils.calculateDistance(poolList.get(0), poolList.get(1)));
+		
 		
 		return poolList;
 	}
@@ -62,7 +62,12 @@ public class Parser {
 	public static void main(String[] args) {
 		File jsonFile = new File(args[0]);
 		Parser p = new Parser();
-		PoolTree tree = new PoolTree(p.parseJson(jsonFile));
+		LinkedList<PoolNode> poolList = p.parseJson(jsonFile);
+		PoolTree tree = new PoolTree(poolList);
+		
+		for (int i = 0; i < poolList.size(); i++) {
+			
+		}
 	}
 	
 }
