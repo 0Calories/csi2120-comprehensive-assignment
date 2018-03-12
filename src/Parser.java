@@ -56,6 +56,7 @@ public class Parser {
 		Parser p = new Parser();
 		LinkedList<PoolNode> poolList = p.parseJson(jsonFile);
 		PoolTree tree = new PoolTree(poolList);
+		System.out.println("\n\n");
 		tree.traverse();
 	}
 	

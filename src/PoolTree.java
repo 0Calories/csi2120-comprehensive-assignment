@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -106,27 +109,39 @@ public class PoolTree {
 	}
 	
 	public void traverse() {
+		PrintWriter writer;
 		Stack<PoolNode> poolStack = new Stack<>();
 		poolStack.push(root);
 		double currentDist = 0;
 		
-		// Iterate through the tree, starting with the root.
-		// Pop the current node, push each child node into the stack.
-		while(!poolStack.isEmpty()) {
-			PoolNode currentNode = poolStack.pop();
-			
-			if (currentNode != root) {
-				currentDist += currentNode.parentEdge.distance;
-			}
-			System.out.println("CurrentNode: " + currentNode.poolName);
-			System.out.println("CurrentDist: " + currentDist);
-
-			// If not a leaf node, get the edges and push into the stack from right to left.
-			if (!currentNode.getEdges().isEmpty()) {
-				for (int i = currentNode.getEdges().size() - 1; i >= 0; i--) {
-					poolStack.push(currentNode.getEdges().get(i).childNode);
+		try {
+			writer = new PrintWriter("route.txt", "UTF-8");
+		
+			// Iterate through the tree, starting with the root.
+			// Pop the current node, push each child node into the stack.
+			while (!poolStack.isEmpty()) {
+				PoolNode currentNode = poolStack.pop();
+				
+				if (currentNode != root) {
+					currentDist += currentNode.parentEdge.distance;
+				}
+				System.out.println(currentNode.poolName + " " + currentDist);
+				writer.println(currentNode.poolName + " " + currentDist);
+	
+				// If not a leaf node, get the edges and push into the stack from right to left.
+				if (!currentNode.getEdges().isEmpty()) {
+					for (int i = currentNode.getEdges().size() - 1; i >= 0; i--) {
+						poolStack.push(currentNode.getEdges().get(i).childNode);
+					}
 				}
 			}
+			
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
 		
 	}
