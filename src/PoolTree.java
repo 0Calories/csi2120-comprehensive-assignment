@@ -25,10 +25,9 @@ public class PoolTree {
 		System.out.println("ROOT: " + root.poolName + ", " + root.longitude);
 		
 		// Find the closest node to the root from the poolList
+		double smallestDist = 9999;
 		PoolNode secondNode = null;
 		for (int i = 0; i < poolList.size(); i++) {
-			double smallestDist = 9999;
-			
 			double tempDist = calculateDistance(root, poolList.get(i));
 			
 			// If the calculated distance is less than the smallest distance so far
@@ -38,32 +37,35 @@ public class PoolTree {
 			}
 		}
 		
+		
 		// Now that the second node has been found, attach it to the root.
 		PoolEdge rootEdge = new PoolEdge(root, secondNode, calculateDistance(root, secondNode));
 		secondNode.parentEdge = rootEdge;
+		root.getEdges().add(rootEdge);
 		connectedNodes.add(secondNode);
 		poolList.remove(secondNode);
 		
+		System.out.println("\n\nCONNECTION ROOT!");
+		System.out.println("Parent: " + rootEdge.parentNode.poolName);
+		System.out.println("Child: " + rootEdge.childNode.poolName);
+		System.out.println("Dist: " + rootEdge.distance);
+		System.out.println("Connectednodes size: " + connectedNodes.size());
+		
 		// Build the tree
-		while(poolList.size() > 0) {
-			
-			// Iterate through the poolList and compare it with each element in connectedNodes.
-			// Starting at 1 because 0 is already set as the root node
-			for (int i = 0; i < poolList.size(); i++) {
-				PoolNode closestPool = findClosestPool(poolList.get(i));
-				double dist = calculateDistance(poolList.get(i), closestPool);
-				PoolEdge newEdge = new PoolEdge(closestPool, poolList.get(i), dist);
-				closestPool.getEdges().add(newEdge);
-				poolList.get(i).parentEdge = newEdge;
-				connectedNodes.add(poolList.get(i));
-				System.out.println("\n\nCONNECTION!");
-				System.out.println("Parent: " + closestPool.poolName);
-				System.out.println("Child: " + poolList.get(i).poolName);
-				System.out.println("Dist: " + dist);
-				System.out.println("Connectednodes size: " + connectedNodes.size());
-				poolList.remove(i);
-			}
-			
+		// Iterate through the poolList and compare it with each element in connectedNodes.
+		// Starting at 1 because 0 is already set as the root node
+		for (int i = 0; i < poolList.size(); i++) {
+			PoolNode closestPool = findClosestPool(poolList.get(i));
+			double dist = calculateDistance(poolList.get(i), closestPool);
+			PoolEdge newEdge = new PoolEdge(closestPool, poolList.get(i), dist);
+			closestPool.getEdges().add(newEdge);
+			poolList.get(i).parentEdge = newEdge;
+			connectedNodes.add(poolList.get(i));
+			System.out.println("\n\nCONNECTION!");
+			System.out.println("Parent: " + closestPool.poolName);
+			System.out.println("Child: " + poolList.get(i).poolName);
+			System.out.println("Dist: " + dist);
+			System.out.println("Connectednodes size: " + connectedNodes.size());
 		}
 	}
 	
@@ -113,6 +115,7 @@ public class PoolTree {
 		Stack<PoolNode> poolStack = new Stack<>();
 		poolStack.push(root);
 		double currentDist = 0;
+		System.out.println(root.getEdges());
 		
 		try {
 			writer = new PrintWriter("route.txt", "UTF-8");
@@ -145,29 +148,4 @@ public class PoolTree {
 		}
 		
 	}
-	
-	/* public double traverse(PoolNode currentNode, PoolEdge currentEdge, double currentDist) {
-		
-		System.out.println("Current pool:" + currentNode.poolName);
-		if (currentEdge != null) {
-			currentDist += currentEdge.distance;
-		}
-		System.out.println(", Current distance:" + currentDist);
-		
-		// If the node has no children, this is a leaf node.
-		if (currentNode.getEdges().isEmpty()) {
-			return currentEdge.distance;
-		}
-		
-		for (PoolEdge e : currentNode.getEdges()) {
-			
-			currentDist += traverse(e.childNode, e, currentDist);
-		}
-		
-		return currentDist;
-
-	} */
-	
-	
-
 }
