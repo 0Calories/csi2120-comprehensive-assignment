@@ -17,22 +17,32 @@ public class PoolTree {
 		// The list is sorted so the very first element is the farthest West.
 		root = poolList.get(0);
 		connectedNodes.add(root);
+		System.out.println("ROOT: " + root.poolName + ", " + root.longitude);
 		
 		// Build the tree
-		for (int i = 1; i < poolList.size(); i++) {
+		while(connectedNodes.size() != poolList.size()) {
 			
-			// Iterate through the current nodes in the tree
-			for (int j = 0; j < connectedNodes.size(); j++) {
-				PoolNode closestPool = findClosestPool(connectedNodes.get(j));
+			// Iterate through the poolList and compare it with each element in connectedNodes.
+			// Starting at 1 because 0 is already set as the root node
+			for (int i = 1; i < poolList.size(); i++) {
+				PoolNode closestPool = findClosestPool(poolList.get(i));
 				double dist = calculateDistance(poolList.get(i), closestPool);
-				PoolEdge newEdge = new PoolEdge(poolList.get(i), closestPool, dist);
+				PoolEdge newEdge = new PoolEdge(closestPool, poolList.get(i), dist);
+				closestPool.getEdges().add(newEdge);
+				connectedNodes.add(poolList.get(i));
+				System.out.println("\n\nCONNECTION!");
+				System.out.println("Parent: " + closestPool.poolName);
+				System.out.println("Child: " + poolList.get(i).poolName);
+				System.out.println("Dist: " + dist);
+				System.out.println("Connectednodes size: " + connectedNodes.size());
 			}
 			
 		}
 		
-		PoolNode temp = findClosestPool(root);
-		System.out.println("Closest pool to root: " + temp.poolName);
-		System.out.println("Distance: " + calculateDistance(root, temp));
+		
+		//PoolNode temp = findClosestPool(root);
+		//System.out.println("Closest pool to root: " + temp.poolName);
+		//System.out.println("Distance: " + calculateDistance(root, temp));
 	}
 	
 	public double calculateDistance(PoolNode node1, PoolNode node2) {
@@ -59,8 +69,8 @@ public class PoolTree {
 		double smallestDist = 9999;
 		PoolNode closestPool = null;
 		
-		for (int i = 0; i < poolList.size(); i++) {
-			PoolNode currentPool = poolList.get(i);
+		for (int i = 0; i < connectedNodes.size(); i++) {
+			PoolNode currentPool = connectedNodes.get(i);
 			// Ensure that we are not comparing the same pool
 			if (pool.parkId != currentPool.parkId) {
 				double tempDist = calculateDistance(pool, currentPool);
@@ -68,7 +78,7 @@ public class PoolTree {
 				// If the calculated distance is less than the smallest distance so far
 				if (tempDist < smallestDist) {
 					smallestDist = tempDist;
-					closestPool = poolList.get(i);
+					closestPool = connectedNodes.get(i);
 					
 				}
 			}

@@ -1,8 +1,8 @@
 
 public class PoolEdge {
 	
-	public PoolNode parentNode;
-	public PoolNode childNode;
+	public PoolNode parentNode = null;
+	public PoolNode childNode = null;
 	public double distance;
 	
 	public PoolEdge(PoolNode parentNode, PoolNode childNode, double distance) {

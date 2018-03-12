@@ -30,7 +30,6 @@ public class Parser {
 		
 		JSONObject jsonObject = (JSONObject) obj;
 		JSONArray features = (JSONArray) jsonObject.get("features");
-		System.out.println(features.toJSONString());
 		
 		for (Object pool : features) {
 			JSONObject jsonPool = (JSONObject) pool;
@@ -49,13 +48,6 @@ public class Parser {
 		}
 		
 		Collections.sort(poolList);
-		
-		for (PoolNode p : poolList) {
-			System.out.println(p.latitude + ", " + p.longitude);
-		}
-		
-		
-		
 		return poolList;
 	}
 	
