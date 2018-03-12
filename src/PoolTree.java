@@ -17,14 +17,34 @@ public class PoolTree {
 		// The list is sorted so the very first element is the farthest West.
 		root = poolList.get(0);
 		connectedNodes.add(root);
+		poolList.remove(0);
 		System.out.println("ROOT: " + root.poolName + ", " + root.longitude);
 		
+		// Find the closest node to the root from the poolList
+		PoolNode secondNode = null;
+		for (int i = 0; i < poolList.size(); i++) {
+			double smallestDist = 9999;
+			
+			double tempDist = calculateDistance(root, poolList.get(i));
+			
+			// If the calculated distance is less than the smallest distance so far
+			if (tempDist < smallestDist) {
+				smallestDist = tempDist;
+				secondNode = poolList.get(i);
+			}
+		}
+		
+		// Now that the second node has been found, attach it to the root.
+		PoolEdge rootEdge = new PoolEdge(root, secondNode, calculateDistance(root, secondNode));
+		connectedNodes.add(secondNode);
+		poolList.remove(secondNode);
+		
 		// Build the tree
-		while(connectedNodes.size() != poolList.size()) {
+		while(poolList.size() > 0) {
 			
 			// Iterate through the poolList and compare it with each element in connectedNodes.
 			// Starting at 1 because 0 is already set as the root node
-			for (int i = 1; i < poolList.size(); i++) {
+			for (int i = 0; i < poolList.size(); i++) {
 				PoolNode closestPool = findClosestPool(poolList.get(i));
 				double dist = calculateDistance(poolList.get(i), closestPool);
 				PoolEdge newEdge = new PoolEdge(closestPool, poolList.get(i), dist);
@@ -35,6 +55,7 @@ public class PoolTree {
 				System.out.println("Child: " + poolList.get(i).poolName);
 				System.out.println("Dist: " + dist);
 				System.out.println("Connectednodes size: " + connectedNodes.size());
+				poolList.remove(i);
 			}
 			
 		}
