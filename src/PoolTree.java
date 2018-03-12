@@ -8,6 +8,10 @@ public class PoolTree {
 		// The most Western pool needs to be the root.
 		// The list is sorted so the very first element is the furthest West.
 		root = poolList.get(0);
+		
+		for (int i = 1; i < poolList.size(); i++) {
+			
+		}
 	}
 	
 }
