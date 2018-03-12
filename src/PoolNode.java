@@ -7,6 +7,7 @@ public class PoolNode implements Comparable<PoolNode> {
 	public String poolName;
 	public double longitude, latitude;
 	private LinkedList<PoolEdge> edges;
+	public PoolEdge parentEdge = null;
 	
 	public PoolNode(int parkId, int facilityId, String poolName, double longitude, double latitude) {
 		this.parkId = parkId;

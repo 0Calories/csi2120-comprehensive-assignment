@@ -38,7 +38,7 @@ public class Parser {
 			
 			int parkId = ((Long) poolProperties.get("PARK_ID")).intValue();
 			int facilityId = ((Long) poolProperties.get("FACILITYID")).intValue();
-			String poolName = poolProperties.get("NAME").toString();
+			String poolName = poolProperties.get("NAME").toString().replace("Wading Pool - ", "");
 			Object[] coordsArray = ((JSONArray) geometry.get("coordinates")).toArray();
 			double latitude = (double) coordsArray[0];
 			double longitude = (double) coordsArray[1];
@@ -56,10 +56,7 @@ public class Parser {
 		Parser p = new Parser();
 		LinkedList<PoolNode> poolList = p.parseJson(jsonFile);
 		PoolTree tree = new PoolTree(poolList);
-		
-		for (int i = 0; i < poolList.size(); i++) {
-			
-		}
+		tree.traverse();
 	}
 	
 }

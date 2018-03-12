@@ -1,11 +1,12 @@
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class PoolTree {
 	
 	private static final double CONST = 6371.0;
 	private static final double RAD_CONST = 180.0;
 	
-	private PoolNode root;
+	public PoolNode root;
 	private LinkedList<PoolNode> poolList;
 	private LinkedList<PoolNode> connectedNodes;
 	
@@ -36,6 +37,7 @@ public class PoolTree {
 		
 		// Now that the second node has been found, attach it to the root.
 		PoolEdge rootEdge = new PoolEdge(root, secondNode, calculateDistance(root, secondNode));
+		secondNode.parentEdge = rootEdge;
 		connectedNodes.add(secondNode);
 		poolList.remove(secondNode);
 		
@@ -49,6 +51,7 @@ public class PoolTree {
 				double dist = calculateDistance(poolList.get(i), closestPool);
 				PoolEdge newEdge = new PoolEdge(closestPool, poolList.get(i), dist);
 				closestPool.getEdges().add(newEdge);
+				poolList.get(i).parentEdge = newEdge;
 				connectedNodes.add(poolList.get(i));
 				System.out.println("\n\nCONNECTION!");
 				System.out.println("Parent: " + closestPool.poolName);
@@ -59,11 +62,6 @@ public class PoolTree {
 			}
 			
 		}
-		
-		
-		//PoolNode temp = findClosestPool(root);
-		//System.out.println("Closest pool to root: " + temp.poolName);
-		//System.out.println("Distance: " + calculateDistance(root, temp));
 	}
 	
 	public double calculateDistance(PoolNode node1, PoolNode node2) {
@@ -106,6 +104,55 @@ public class PoolTree {
 		}
 		return closestPool;
 	}
+	
+	public void traverse() {
+		Stack<PoolNode> poolStack = new Stack<>();
+		poolStack.push(root);
+		double currentDist = 0;
+		
+		// Iterate through the tree, starting with the root.
+		// Pop the current node, push each child node into the stack.
+		while(!poolStack.isEmpty()) {
+			PoolNode currentNode = poolStack.pop();
+			
+			if (currentNode != root) {
+				currentDist += currentNode.parentEdge.distance;
+			}
+			System.out.println("CurrentNode: " + currentNode.poolName);
+			System.out.println("CurrentDist: " + currentDist);
+
+			// If not a leaf node, get the edges and push into the stack from right to left.
+			if (!currentNode.getEdges().isEmpty()) {
+				for (int i = currentNode.getEdges().size() - 1; i >= 0; i--) {
+					poolStack.push(currentNode.getEdges().get(i).childNode);
+				}
+			}
+		}
+		
+	}
+	
+	/* public double traverse(PoolNode currentNode, PoolEdge currentEdge, double currentDist) {
+		
+		System.out.println("Current pool:" + currentNode.poolName);
+		if (currentEdge != null) {
+			currentDist += currentEdge.distance;
+		}
+		System.out.println(", Current distance:" + currentDist);
+		
+		// If the node has no children, this is a leaf node.
+		if (currentNode.getEdges().isEmpty()) {
+			return currentEdge.distance;
+		}
+		
+		for (PoolEdge e : currentNode.getEdges()) {
+			
+			currentDist += traverse(e.childNode, e, currentDist);
+		}
+		
+		return currentDist;
+
+	} */
+	
 	
 
 }
