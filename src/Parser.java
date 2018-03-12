@@ -51,8 +51,10 @@ public class Parser {
 		Collections.sort(poolList);
 		
 		for (PoolNode p : poolList) {
-			System.out.println(p.longitude);
+			System.out.println(p.latitude + ", " + p.longitude);
 		}
+		
+		System.out.println(Utils.calculateDistance(poolList.get(0), poolList.get(1)));
 		
 		return poolList;
 	}

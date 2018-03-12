@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 
 public class PoolNode implements Comparable<PoolNode> {
 
@@ -5,6 +6,7 @@ public class PoolNode implements Comparable<PoolNode> {
 	private int facilityId;
 	private String poolName;
 	double longitude, latitude;
+	private LinkedList<PoolNode> childNodes;
 	
 	public PoolNode(int parkId, int facilityId, String poolName, double longitude, double latitude) {
 		this.parkId = parkId;
@@ -12,6 +14,7 @@ public class PoolNode implements Comparable<PoolNode> {
 		this.poolName = poolName;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.childNodes = new LinkedList<>();
 	}
 
 	// This will be used to sort the list of pools.
@@ -29,4 +32,7 @@ public class PoolNode implements Comparable<PoolNode> {
 		}
 	}
 	
+	public LinkedList<PoolNode> getChildNodes() {
+		return childNodes;
+	}
 }
